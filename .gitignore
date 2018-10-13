@@ -10,6 +10,7 @@ static/*
 *.ini
 *.sql
 vk_config.v2.json
+vshaurme/settings/local.py
 
 # C extensions
 *.so
