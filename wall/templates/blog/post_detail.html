@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<div class="post">
+    {% if post.published_date %}
+        <div class="date"> {{ post.published_date }} </div>
+    {% else %}
+        <a class="btn btn-outline-primary" href="{% url 'post_publish' pk=post.pk %}"><i class="fa fa-check"></i> Publish</a>
+    {% endif %}
+    {% if user.is_superuser %}
+         <a class="btn btn-outline-primary" href="{% url 'post_edit' pk=post.pk %}"><i class="fa fa-pencil"></i> Edit </a>
+         <a class="btn btn-outline-primary" href="{% url 'post_remove' pk=post.pk %}"><i class="fa fa-trash"></i> Remove </a>
+    {% endif %}
+    {% if user.is_authenticated%}
+        <a class="btn btn-outline-primary" href="{% url 'add_comment_to_post' pk=post.pk %}"><i class="fa fa-comment"></i> Add comment </a>
+    {% endif %}
+    <hr>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.text|linebreaksbr }}</p>
+    <hr>
+</div>
+{% for comment in post.comments.all %}
+{% if user == comment.author or comment.approved_comment %}
+<div class="comment">
+    <div class="buttons">
+        {{ comment.created_date }}
+        {% if not comment.approved_comment %}
+            <a class="btn btn-outline-primary" href="{% url 'comment_remove' pk=comment.pk %}"><i class="fa fa-trash"></i> Remove Comment</a>
+            <a class="btn btn-outline-primary" href="{% url 'comment_approve' pk=comment.pk %}"><i class="fa fa-check"></i> Publish Comment</a>
+        {% endif %}
+    </div>
+    <strong>{{ comment.author.username }}</strong>
+    <p>{{ comment.text|linebreaks }}</p>
+</div>
+{% endif %}
+{% empty %}
+<p>No comments here yet :(</p>
+{% endfor %}
+
+{% endblock %}
