@@ -1,0 +1,17 @@
+<nav class="navbar fixed-top navbar-light" style="background-color: #e3f2fd;">
+	<div>
+		<a class="navbar-brand float-left" href="/">Logo</a>
+		{% if user.is_authenticated %}
+			{% if user.is_superuser %}
+				<a class="nav-link float-left ml-3" href="{% url 'post_new' %}"><i class="fa fa-plus"></i> New post</a>
+				<a class="nav-link float-left ml-3" href="{% url 'post_draft_list' %}"><i class="fa fa-pencil-square-o"></i> Drafts</a>
+	    	{% endif %}
+		{% else %}
+	    	<a class="nav-link float-left ml-3" href="{% url 'login' %}"><i class="fa fa-lock"></i> Log In</a>
+	    	<a class="nav-link float-left ml-3" href="{% url 'signup' %}"><i class="fa fa-user-plus"></i> Sign Up</a>
+		{% endif %}
+	</div>
+	{% if user.is_authenticated %}
+		<div class="nav-link float-right">Hello {{ user.username }} (<a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i> Log out</a>)</div>
+	{% endif %}
+</nav>
